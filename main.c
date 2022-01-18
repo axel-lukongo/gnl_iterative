@@ -1,9 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alukongo <alukongo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/18 18:07:10 by alukongo          #+#    #+#             */
+/*   Updated: 2022/01/18 18:07:15 by alukongo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include"get_next_line.h"
 
 int	main(void)
 {
 	int		fd;
 	char	*str;
+
 	fd = open("file", O_RDONLY);
 	str = get_next_line(fd);
 	while (str)
@@ -12,25 +25,4 @@ int	main(void)
 		free(str);
 		str = get_next_line(fd);
 	}
-	/*str = get_next_line(fd);
-	printf("%s", str);
-	free(str);
-	str = get_next_line(fd);
-	printf("%s", str);
-	free(str);
-	str = get_next_line(fd);
-	printf("%s", str);
-	free(str);
-	str = get_next_line(fd);
-	printf("%s", str);
-	free(str);
-	str = get_next_line(fd);
-	printf("%s", str);
-	free(str);
-	int ret;
-	char buf[7];
-	ret = read(fd, buf, 5);
-	printf("ret1 = %d \n",ret);
-	buf[ret] = '\0';
-	printf("ret1 = %d \n",ret);*/
 }

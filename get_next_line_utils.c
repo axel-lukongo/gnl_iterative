@@ -6,7 +6,7 @@
 /*   By: alukongo <alukongo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 21:50:16 by alukongo          #+#    #+#             */
-/*   Updated: 2022/01/18 18:00:09 by alukongo         ###   ########.fr       */
+/*   Updated: 2022/01/18 19:28:08 by alukongo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,17 @@ char	*ft_strdup_r(char *s, char *src, char *ptr)
 
 	size = 0;
 	i = -1;
-	if (src && src[0])
+	if (src && *src)
 	{
-		while (src[size])
+		while (src && src[size])
 			size++;
-		s = malloc(sizeof(char) * (size + 1));
+		s = malloc(sizeof(char) * (size + 2));
 		if (!(s))
 		{
 			free(s);
 			return (0);
 		}
-		while (src[++i])
+		while (src && src[++i])
 			s[i] = src[i];
 		while (i < ft_strlen_nl(src) + 2)
 			s[i++] = '\0';
@@ -59,18 +59,21 @@ char	*ft_strjoin(char *s1, char *s2, int size, int ret)
 	char	*str;
 	int		i;
 	int		j;
-	int		tes;
 
-	tes = ret;
 	j = 0;
 	i = 0;
 	str = malloc(sizeof(char) * (ft_strlen_nl(s1) + size + 1));
 	if (!str)
 		return (0);
-	while (s1 && s1[i])
+	while (s1 && i < (ft_strlen_nl(s1)))
 	{
 		str[i] = s1[i];
 		i++;
+		while (s1[i] == '\n')
+		{
+			str[i] = s1[i];
+			i++;
+		}
 	}
 	while (s2 && j < (ft_strlen_nl(s2) - 1))
 	{

@@ -6,7 +6,7 @@
 /*   By: alukongo <alukongo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 21:54:03 by alukongo          #+#    #+#             */
-/*   Updated: 2022/01/18 17:58:37 by alukongo         ###   ########.fr       */
+/*   Updated: 2022/01/18 18:48:50 by alukongo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,16 +47,19 @@ char	*get_next_line(int fd)
 			str = ft_strjoin(rest, 0, 0, ft_strlen_nl(rest));
 			rest = free_addrs(rest, rest);
 		}
-		while (is_newline(str) == NO_NEW_LINE && ret > 0)
+		if(is_newline(str) == NO_NEW_LINE)
 		{
-			ret = read(fd, buf, BUFFER_SIZE);
-			if (ret <= 0)
-				return (str);
+			while (is_newline(str) == NO_NEW_LINE && ret > 0)
+			{
+				ret = read(fd, buf, BUFFER_SIZE);
+				if (ret <= 0)
+					return (str);
+				buf[ret] = '\0';
+				str = ft_strjoin(str, buf, ft_strlen_nl(buf), ret);
+			}
 			buf[ret] = '\0';
-			str = ft_strjoin(str, buf, ft_strlen_nl(buf), ret);
+			rest = free_addrs(rest, buf);
 		}
-		buf[ret] = '\0';
-		rest = free_addrs(rest, buf);
 	}
 	return (str);
 }
