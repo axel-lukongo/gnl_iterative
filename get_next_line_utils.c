@@ -6,7 +6,7 @@
 /*   By: alukongo <alukongo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 21:50:16 by alukongo          #+#    #+#             */
-/*   Updated: 2022/01/13 17:41:35 by alukongo         ###   ########.fr       */
+/*   Updated: 2022/01/18 18:00:09 by alukongo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ char	*ft_strdup_r(char *s, char *src, char *ptr)
 	i = -1;
 	if (src && src[0])
 	{
-		while(src[size])
-		size++;
+		while (src[size])
+			size++;
 		s = malloc(sizeof(char) * (size + 1));
 		if (!(s))
 		{
@@ -46,8 +46,6 @@ char	*ft_strdup_r(char *s, char *src, char *ptr)
 		}
 		while (src[++i])
 			s[i] = src[i];
-		/*while(src[i] == '\n')
-			s[i] = src[i];*/
 		while (i < ft_strlen_nl(src) + 2)
 			s[i++] = '\0';
 		if (ft_strlen_nl(ptr))
@@ -76,23 +74,22 @@ char	*ft_strjoin(char *s1, char *s2, int size, int ret)
 	}
 	while (s2 && j < (ft_strlen_nl(s2) - 1))
 	{
-	//	s2[tes] = '\0';
-		str[i++] =  s2[j++];
-		while(s2[j] == '\n')
+		str[i++] = s2[j++];
+		while (s2[j] == '\n')
 			str[i++] = s2[j++];
 	}
 	str[i] = '\0';
 	return (str);
 }
 
-char *free_addrs(char *rest, char *buf)
+char	*free_addrs(char *rest, char *buf)
 {
 	char	*ptr;
 
 	ptr = rest;
-	while(*buf != '\n' && *buf != '\0')
+	while (*buf != '\n' && *buf != '\0')
 		buf++;
-	while(*buf == '\n')
+	while (*buf == '\n')
 		buf++;
 	if (!*buf)
 	{
