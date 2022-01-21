@@ -1,65 +1,60 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alukongo <alukongo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/03 21:54:03 by alukongo          #+#    #+#             */
-/*   Updated: 2022/01/18 18:48:50 by alukongo         ###   ########.fr       */
+/*   Created: 2022/01/21 14:39:42 by alukongo          #+#    #+#             */
+/*   Updated: 2022/01/21 14:40:02 by alukongo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"get_next_line.h"
+#include "get_next_line.h"
 
-int	is_newline(char *str)
+char	*get_the_line(char **line, int end_line)
 {
-	int	i;
+	char	*s;
 
-	i = 0;
-	if (str)
+	if (!*line || !**line)
 	{
-		while (str[i])
+		if (*line)
 		{
-			if (str[i] == '\n')
-			{
-				return (i);
-			}
-			i++;
+			free(*line);
+			*line = (NULL);
 		}
+		return (NULL);
 	}
-	return (NO_NEW_LINE);
+	if (end_line == -1)
+		end_line = ft_strlen(*line);
+	s = ft_substr(*line, 0, end_line + 1, 0);
+	*line = ft_substr(*line, end_line + 1, ft_strlen(*line), 1);
+	return (s);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*rest;
-	char		*str;
-	int			ret;
-	char		buf[BUFFER_SIZE];
+	char		*buf;
+	static char	*line;
+	int			end_line;
+	int			result;
 
-	str = NULL;
-	ret = 1;
-	if (BUFFER_SIZE > 0)
+	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, 0, 0) < 0)
+		return (NULL);
+	buf = malloc(sizeof(char) * BUFFER_SIZE + 1);
+	if (!buf)
+		return (NULL);
+	end_line = ft_find_newline(line);
+	if (end_line == -1)
+		result = read(fd, buf, BUFFER_SIZE);
+	while (end_line == -1 && result > 0)
 	{
-		if (rest && *rest)
-		{
-			str = ft_strjoin(rest, 0, 0, ft_strlen_nl(rest));
-			rest = free_addrs(rest, rest);
-		}
-		if(is_newline(str) == NO_NEW_LINE)
-		{
-			while (is_newline(str) == NO_NEW_LINE && ret > 0)
-			{
-				ret = read(fd, buf, BUFFER_SIZE);
-				if (ret <= 0)
-					return (str);
-				buf[ret] = '\0';
-				str = ft_strjoin(str, buf, ft_strlen_nl(buf), ret);
-			}
-			buf[ret] = '\0';
-			rest = free_addrs(rest, buf);
-		}
+		buf[result] = '\0';
+		line = ft_strjoin(line, buf);
+		end_line = ft_find_newline(line);
+		if (end_line == -1)
+			result = read(fd, buf, BUFFER_SIZE);
 	}
-	return (str);
+	free(buf);
+	return (get_the_line(&line, end_line));
 }

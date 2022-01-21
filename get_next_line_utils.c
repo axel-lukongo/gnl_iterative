@@ -1,106 +1,88 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils2.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alukongo <alukongo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/03 21:50:16 by alukongo          #+#    #+#             */
-/*   Updated: 2022/01/18 19:28:08 by alukongo         ###   ########.fr       */
+/*   Created: 2022/01/21 14:39:57 by alukongo          #+#    #+#             */
+/*   Updated: 2022/01/21 14:39:59 by alukongo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"get_next_line.h"
+#include "get_next_line.h"
 
-int	ft_strlen_nl(char *s)
+size_t	ft_strlen(char *str)
+{
+	size_t	i;
+
+	i = 0;
+	while (str && str[i])
+		i++;
+	return (i);
+}
+
+int	ft_find_newline(char *str)
 {
 	int	i;
 
 	i = 0;
-	if (s)
-	{
-		while ((s[i] && s[i] != '\n'))
-			i++;
-		if (s[i] == '\n')
-			i++;
-	}
+	if (!str)
+		return (-1);
+	while (str[i] && str[i] != '\n')
+		i++;
+	if (!str[i])
+		return (-1);
 	return (i);
 }
 
-char	*ft_strdup_r(char *s, char *src, char *ptr)
+char	*ft_strjoin(char *s1, char *s2)
 {
+	size_t	len1;
+	size_t	len2;
 	int		i;
-	int		size;
+	char	*newstr;
 
-	size = 0;
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	newstr = malloc(sizeof(char) * len1 + len2 + 1);
+	if (!newstr)
+		return (NULL);
 	i = -1;
-	if (src && *src)
-	{
-		while (src && src[size])
-			size++;
-		s = malloc(sizeof(char) * (size + 2));
-		if (!(s))
-		{
-			free(s);
-			return (0);
-		}
-		while (src && src[++i])
-			s[i] = src[i];
-		while (i < ft_strlen_nl(src) + 2)
-			s[i++] = '\0';
-		if (ft_strlen_nl(ptr))
-			free(ptr);
-	}
-	return (s);
+	while (s1 && s1[++i])
+		newstr[i] = s1[i];
+	i = -1;
+	while (s2 && s2[++i])
+		newstr[len1 + i] = s2[i];
+	if (i < 0)
+		i = 0;
+	newstr[len1 + i] = '\0';
+	if (s1)
+		free (s1);
+	return (newstr);
 }
 
-char	*ft_strjoin(char *s1, char *s2, int size, int ret)
+char	*ft_substr(char *s, unsigned int start, size_t len, int free_s)
 {
-	char	*str;
-	int		i;
-	int		j;
+	char	*newstr;
+	size_t	i;
 
-	j = 0;
+	if (!s)
+		return (NULL);
+	newstr = malloc(sizeof(char) * len + 1);
+	if (!newstr)
+		return (NULL);
 	i = 0;
-	str = malloc(sizeof(char) * (ft_strlen_nl(s1) + size + 1));
-	if (!str)
-		return (0);
-	while (s1 && i < (ft_strlen_nl(s1)))
+	if (start < ft_strlen(s))
 	{
-		str[i] = s1[i];
-		i++;
-		while (s1[i] == '\n')
+		while (s[start + i] && i < len)
 		{
-			str[i] = s1[i];
+			newstr[i] = s[start + i];
 			i++;
 		}
 	}
-	while (s2 && j < (ft_strlen_nl(s2) - 1))
-	{
-		str[i++] = s2[j++];
-		while (s2[j] == '\n')
-			str[i++] = s2[j++];
-	}
-	str[i] = '\0';
-	return (str);
-}
-
-char	*free_addrs(char *rest, char *buf)
-{
-	char	*ptr;
-
-	ptr = rest;
-	while (*buf != '\n' && *buf != '\0')
-		buf++;
-	while (*buf == '\n')
-		buf++;
-	if (!*buf)
-	{
-		free(ptr);
-		ptr = NULL;
-		rest = NULL;
-	}
-	else
-		rest = ft_strdup_r(rest, buf, ptr);
-	return (rest);
+	newstr[i] = '\0';
+	if (free_s && s)
+		free(s);
+	return (newstr);
 }
