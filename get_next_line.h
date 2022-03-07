@@ -18,7 +18,7 @@
 # include<sys/stat.h>
 # include<fcntl.h>
 # include<stdio.h>
-
+#define BUFFER_SIZE 1
 size_t	ft_strlen(char *str);
 int		is_newline(char *str);
 char	*ft_strjoin(char *s1, char *s2);
